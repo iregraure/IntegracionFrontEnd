@@ -9,6 +9,7 @@ let divResultados = document.getElementById("resultado");
 botonListarClientes.addEventListener('click', (e) => {
     e.preventDefault();
     eliminaTabla();
+    resetFormulario()
     fetch('http://127.0.0.1:8080/api/customer')
         .then(res => res.ok ? Promise.resolve(res) : Promise.reject(res))
         .then(res => res.json())
@@ -23,38 +24,87 @@ botonListarClientes.addEventListener('click', (e) => {
             });
             divResultados.appendChild(tabla);
         })
+        .catch(error => {
+            if (error.status == 404) {
+                alert("No existen clientes");
+            }
+            else {
+                alert("Se ha producido un error inesperado");
+            }
+        })
 });
 
 botonMostrarCliente.addEventListener('click', (e) => {
     e.preventDefault();
     eliminaTabla();
     let id = document.getElementById("id").value;
-    if(id == ""){
+    if (id == "") {
         alert("Debe introducir un id");
     }
-    else{
+    else {
         fetch(`http://127.0.0.1:8080/api/customer/${id}`)
-        .then(res => res.ok ? Promise.resolve(res) : Promise.reject(res))
-        .then(res => res.json())
-        .then(res => {
-            let tabla = document.createElement("table");
-            tabla.id = "clientes";
-            aniadePrimeraFila(tabla);
-            aniadeFila(res, 1, tabla);
-            divResultados.appendChild(tabla);
-        })
-        .catch(res => alert("No existe ningún cliente con ese id"))
+            .then(res => res.ok ? Promise.resolve(res) : Promise.reject(res))
+            .then(res => res.json())
+            .then(res => {
+                document.getElementById("fullName").value = res.fullName;
+                document.getElementById("address").value = res.address;
+                document.getElementById("phoneNumber").value = res.phoneNumber;
+                document.getElementById("birthDate").value = res.birthDate;
+                document.getElementById("dni").value = res.dni;
+                document.getElementById("id").value = "";
+            })
+            .catch(res => {
+                alert(`No existe ningún cliente con el id ${id}`);
+                document.getElementById("id").value = "";
+            })
     }
 });
 
 botonAñadirCliente.addEventListener('click', (e) => {
     e.preventDefault();
     eliminaTabla();
+    let dni = document.getElementById("dni").value;
+    if (dni == "") {
+        alert("El campo dni no puede estar vacío");
+    }
+    else {
+        let fullName = document.getElementById("fullName").value;
+        let address = document.getElementById("address").value;
+        let phoneNumber = document.getElementById("phoneNumber").value;
+        let birthDate = document.getElementById("birthDate").value;
+        fetch('http://127.0.0.1:8080/api/customer', {
+            method: 'POST',
+            body: JSON.stringify({
+                fullName: fullName,
+                address: address,
+                phoneNumber: phoneNumber,
+                birthDate: birthDate,
+                dni: dni
+            }),
+            headers: {
+                "Content-type": "application/json"
+            }
+        })
+            .then(res => res.ok ? Promise.resolve(res) : Promise.reject(res))
+            .then(res => {
+                alert("El cliente se ha añadido de forma correcta");
+                resetFormulario();
+            })
+            .catch(error => {
+                console.log(error)
+                if (error.status == 409) {
+                    alert('Ya existe un cliente con ese dni');
+                }
+                else {
+                    alert('Se ha producido un error inesperado.');
+                }
+            })
+    }
 })
 
 const eliminaTabla = () => {
     let tabla = document.getElementById("clientes");
-    if (tabla != null){
+    if (tabla != null) {
         tabla.parentNode.removeChild(tabla);
     }
 }
@@ -102,4 +152,12 @@ const aniadeFila = (customer, pos, tabla) => {
     phoneNumber.innerHTML = customer.phoneNumber;
     birthDate.innerHTML = customer.birthDate;
     dni.innerHTML = customer.dni;
+}
+
+const resetFormulario = () => {
+    document.getElementById("fullName").value = "";
+    document.getElementById("address").value = "";
+    document.getElementById("phoneNumber").value = "";
+    document.getElementById("birthDate").value = "";
+    document.getElementById("dni").value = "";
 }

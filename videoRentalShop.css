@@ -54,6 +54,13 @@ th, td {
     align-items: flex-end;
 }
 
+#resultado {
+    border: solid purple 1px;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+}
+
 #getCustomer {
     justify-content: space-around;
 }
