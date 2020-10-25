@@ -1,47 +1,66 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="videoRentalShop.css" media="screen">
 </head>
+
 <body>
     <div id="all">
+        <h1>VIDEO RENTAL SHOP</h1>
+        <h2>Gestión de clientes</h2>
         <form id="formulario">
             <div id="form">
                 <div class="campo">
-                        <label for="fullName">Nombre completo</label>
-                        <input type="text" name="fullName" class="inputForm" id="fullName">
+                    <label for="fullName">Nombre completo</label>
+                    <input type="text" name="fullName" class="inputForm" id="fullName">
                 </div>
                 <div class="campo">
-                        <label for="address">Dirección</label>
-                        <input type="text" name="address" class="inputForm" id="address">
+                    <label for="address">Dirección</label>
+                    <input type="text" name="address" class="inputForm" id="address">
                 </div>
                 <div class="campo">
-                        <label for="phoneNumber">Teléfono</label>
-                        <input type="text" name="phoneNumber" class="inputForm" id="phoneNumber">
+                    <label for="phoneNumber">Teléfono</label>
+                    <input type="text" name="phoneNumber" class="inputForm" id="phoneNumber">
                 </div>
                 <div class="campo">
-                        <label for="birthDate">Fecha de nacimiento</label>
-                        <input type="text" name="birthDate" class="inputForm" id="birthDate">
+                    <label for="birthDate">Fecha de nacimiento</label>
+                    <input type="text" name="birthDate" class="inputForm" id="birthDate">
                 </div>
                 <div class="campo">
-                        <label for="dni">DNI</label>
-                        <input type="text" name="dni" class="inputForm" id="dni">
+                    <label for="dni">DNI</label>
+                    <input type="text" name="dni" class="inputForm" id="dni">
                 </div>
-            </div>
-            <div id="addCustomer">
-                <button id="aniade">Añade cliente</button>
-            </div>
-            <div id="getCustomer">
-                <input type="text" name="id" id="id" placeholder="Id">
-                <button id="cliente">Ver datos cliente</button>
-            </div>
-            <div id="getCustomers">
-                <button id="lista">Lista clientes</button>
+                <div id="botones">
+                    <div id="getCustomer">
+                        <input type="text" name="idGet" id="idGet" placeholder="Id">
+                        <button id="cliente">Ver datos cliente</button>
+                    </div>
+                    <div id="addCustomer">
+                        <button id="aniade">Añade cliente</button>
+                    </div>
+                    <div id="updateCustomer">
+                        <input type="text" name="idUpdate" id="idUpdate" placeholder="Id">
+                        <button id="update">Actualizar cliente</button>
+                    </div>
+                    <div id="getCustomers">
+                        <button id="lista">Lista clientes</button>
+                    </div>
+                    <div id="deleteCustomer">
+                        <input type="text" name="idDelete" id="idDelete" placeholder="Id">
+                        <button id="delete">Eliminar cliente</button>
+                    </div>
+
+                    <div id="resetForm">
+                        <button id="reset">Borrar datos formulario</button>
+                    </div>
+                </div>
             </div>
             <div id="resultado"></div>
         </form>
     </div>
     <script src="videoRentalShop.js" type="text/javascript"></script>
 </body>
+
 </html>

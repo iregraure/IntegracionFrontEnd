@@ -2,6 +2,9 @@
 let botonListarClientes = document.getElementById("lista");
 let botonMostrarCliente = document.getElementById("cliente");
 let botonAñadirCliente = document.getElementById("aniade");
+let botonResetFormulario = document.getElementById("reset");
+let botonEliminarCliente = document.getElementById("delete");
+let botonActualizarCliente = document.getElementById("update");
 // Guardamos el div donde vamos a mostrar los resultados en una variable
 let divResultados = document.getElementById("resultado");
 
@@ -9,7 +12,7 @@ let divResultados = document.getElementById("resultado");
 botonListarClientes.addEventListener('click', (e) => {
     e.preventDefault();
     eliminaTabla();
-    resetFormulario()
+    resetFormulario();
     fetch('http://127.0.0.1:8080/api/customer')
         .then(res => res.ok ? Promise.resolve(res) : Promise.reject(res))
         .then(res => res.json())
@@ -27,21 +30,20 @@ botonListarClientes.addEventListener('click', (e) => {
         .catch(error => {
             if (error.status == 404) {
                 alert("No existen clientes");
-            }
-            else {
+            } else {
                 alert("Se ha producido un error inesperado");
             }
         })
 });
 
+// Funcionamiento del botón para mostrar el cliente con el id que se le pase
 botonMostrarCliente.addEventListener('click', (e) => {
     e.preventDefault();
     eliminaTabla();
-    let id = document.getElementById("id").value;
+    let id = document.getElementById("idGet").value;
     if (id == "") {
         alert("Debe introducir un id");
-    }
-    else {
+    } else {
         fetch(`http://127.0.0.1:8080/api/customer/${id}`)
             .then(res => res.ok ? Promise.resolve(res) : Promise.reject(res))
             .then(res => res.json())
@@ -51,51 +53,138 @@ botonMostrarCliente.addEventListener('click', (e) => {
                 document.getElementById("phoneNumber").value = res.phoneNumber;
                 document.getElementById("birthDate").value = res.birthDate;
                 document.getElementById("dni").value = res.dni;
-                document.getElementById("id").value = "";
+                document.getElementById("idGet").value = "";
             })
             .catch(res => {
                 alert(`No existe ningún cliente con el id ${id}`);
-                document.getElementById("id").value = "";
+                document.getElementById("idGet").value = "";
             })
     }
 });
 
+// Comportamiento del botón para añadir un cliente
 botonAñadirCliente.addEventListener('click', (e) => {
     e.preventDefault();
     eliminaTabla();
     let dni = document.getElementById("dni").value;
     if (dni == "") {
         alert("El campo dni no puede estar vacío");
-    }
-    else {
+    } else {
         let fullName = document.getElementById("fullName").value;
         let address = document.getElementById("address").value;
         let phoneNumber = document.getElementById("phoneNumber").value;
         let birthDate = document.getElementById("birthDate").value;
         fetch('http://127.0.0.1:8080/api/customer', {
-            method: 'POST',
-            body: JSON.stringify({
-                fullName: fullName,
-                address: address,
-                phoneNumber: phoneNumber,
-                birthDate: birthDate,
-                dni: dni
-            }),
-            headers: {
-                "Content-type": "application/json"
-            }
-        })
+                method: 'POST',
+                body: JSON.stringify({
+                    fullName: fullName,
+                    address: address,
+                    phoneNumber: phoneNumber,
+                    birthDate: birthDate,
+                    dni: dni
+                }),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            })
             .then(res => res.ok ? Promise.resolve(res) : Promise.reject(res))
             .then(res => {
                 alert("El cliente se ha añadido de forma correcta");
                 resetFormulario();
             })
             .catch(error => {
-                console.log(error)
                 if (error.status == 409) {
                     alert('Ya existe un cliente con ese dni');
+                } else {
+                    alert('Se ha producido un error inesperado.');
                 }
-                else {
+            })
+    }
+})
+
+// Comportamiento del botón para borrar los datos del formulario
+botonResetFormulario.addEventListener('click', (e) => {
+    e.preventDefault();
+    resetFormulario();
+})
+
+// Comportamiento del botón para eliminar un cliente
+botonEliminarCliente.addEventListener('click', (e) => {
+    e.preventDefault();
+    eliminaTabla();
+    resetFormulario();
+    let id = document.getElementById("idDelete").value;
+    if (id == "") {
+        alert("Debe introducir un id");
+    } else {
+        fetch(`http://127.0.0.1:8080/api/customer/${id}`, {
+                method: 'DELETE'
+            })
+            .then(res => res.ok ? Promise.resolve(res) : Promise.reject(res))
+            .then(res => {
+                alert("Se ha eliminado el cliente");
+                document.getElementById("idDelete").value = "";
+            })
+            .catch(error => {
+                if (error.status == 404) {
+                    alert(`No existe ningún cliente con el id ${id}`);
+                    document.getElementById("idDelete").value = "";
+                } else {
+                    alert('Se ha producido un error inesperado.');
+                }
+            })
+    }
+})
+
+// Comportamiento del botón para actualizar un cliente
+botonActualizarCliente.addEventListener('click', (e) => {
+    e.preventDefault();
+    eliminaTabla();
+    let id = document.getElementById("idUpdate").value;
+    if (id == "") {
+        alert("Debe introducir un id");
+    } else {
+        let fullName = document.getElementById("fullName").value;
+        if (fullName == "") {
+            fullName = null;
+        }
+        let address = document.getElementById("address").value;
+        if (address == "") {
+            address = null;
+        }
+        let phoneNumber = document.getElementById("phoneNumber").value;
+        if (phoneNumber == "") {
+            phoneNumber = null;
+        }
+        let birthDate = document.getElementById("birthDate").value;
+        if (birthDate == "") {
+            birthDate = null;
+        }
+        fetch(`http://127.0.0.1:8080/api/customer/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    id: id,
+                    fullName: fullName,
+                    address: address,
+                    phoneNumber: phoneNumber,
+                    birthDate: birthDate
+                }),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            })
+            .then(res => res.ok ? Promise.resolve(res) : Promise.reject(res))
+            .then(res => {
+                console.log(res)
+                alert("El cliente se ha actualizado de forma correcta");
+                resetFormulario();
+                document.getElementById("idUpdate").value = "";
+            })
+            .catch(error => {
+                if (error.status == 404) {
+                    alert(`No existe ningún cliente con el id ${id}`);
+                    document.getElementById("idUpdate").value = "";
+                } else {
                     alert('Se ha producido un error inesperado.');
                 }
             })

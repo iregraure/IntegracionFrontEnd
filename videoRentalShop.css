@@ -1,70 +1,157 @@
 * {
     margin-top: 10px;
     font-size: 20px;
+    background-color: #cceeff;
 }
 
 table {
     border-collapse: collapse;
-    border: solid black 3px;
+    border: solid #0184C4 3px;
 }
 
-th, td {
-    border: solid black 1px;
+th,
+td {
+    border: solid #0184C4 1px;
     width: 16%;
     text-align: center;
+}
+
+th {
+    background-color: #4dc3ff;
+}
+
+tr:nth-child(odd) td {
+    background-color: #99ddff;
+}
+
+tr:nth-child(even) td {
+    background-color: #A8E2FD;
 }
 
 #all {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+}
+
+h1,
+h2 {
+    align-self: center;
+    color: #0099e6;
+}
+
+h1 {
+    font-size: 50px;
+    -webkit-text-stroke: 1px black;
+}
+
+h2 {
+    font-size: 40px;
+    -webkit-text-stroke: 1px black;
 }
 
 #formulario {
     width: 95%;
-    border: solid blue 1px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-self: center;
 }
 
-#form{
-    width: 100%;
-    border: solid 1px purple;
+#form {
+    width: 40%;
     display: flex;
     flex-flow: column wrap;
     align-items: center;
+    border: solid 5px #0184C4;
+    background-color: #8DD9FE;
+    padding-bottom: 20px;
 }
 
 .campo {
-    border: solid 1px green;
-    width: 40%;
+    width: 95%;
+    background-color: #8DD9FE;
     display: grid;
     grid-template-columns: 50% 50%;
+}
+
+.campo label {
+    background-color: #8DD9FE;
 }
 
 .campo input {
     width: 70%;
 }
 
-#getCustomers, #addCustomer, #getCustomer {
-    border: solid green 1px;
-    width: 20%;
+#botones {
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 5%;
+    background-color: #8DD9FE;
+}
+
+#getCustomers,
+#addCustomer,
+#getCustomer,
+#resetForm,
+#deleteCustomer,
+#updateCustomer {
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    background-color: #8DD9FE;
 }
 
 #resultado {
-    border: solid purple 1px;
     width: 90%;
     display: flex;
     justify-content: center;
+    margin-top: 3%;
 }
 
-#getCustomer {
-    justify-content: space-around;
-}
-
-#getCustomer input {
+#getCustomer input,
+#deleteCustomer input,
+#updateCustomer input {
     width: 50px;
+    margin-right: 5%;
+    padding: 7px;
+    border-radius: 15px;
+}
+
+button {
+    position: relative;
+    background-color: #4dc3ff;
+    border: none;
+    padding: 10px;
+    text-align: center;
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+button:after {
+    content: "";
+    background: #99ddff;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 1s;
+}
+
+button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s;
+}
+
+button:focus {
+    outline-color: #0184C4;
 }
